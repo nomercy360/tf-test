@@ -1,0 +1,29 @@
+---
+apiVersion: source.toolkit.fluxcd.io/v1beta1
+kind: GitRepository
+metadata:
+  name: nginx
+  namespace: flux-system
+spec:
+  interval: 1m
+  url: https://github.com/nomercy360/helm-nginx.git
+  ref:
+    branch: main
+---
+apiVersion: helm.toolkit.fluxcd.io/v2beta1
+kind: HelmRelease
+metadata:
+  name: nginx
+  namespace: flux-system
+spec:
+  interval: 5m
+  targetNamespace: default
+  chart:
+    spec:
+      chart: ./nginx
+      version: '0.1.x'
+      sourceRef:
+        kind: GitRepository
+        name: nginx
+        namespace: flux-system
+      interval: 1m
